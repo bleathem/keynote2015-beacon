@@ -1,6 +1,6 @@
 var mongoose   = require('mongoose');
 
-var dbUrl  = process.env.DB_URL || 'mongodb://localhost/beaconlocation'
+var dbUrl  = process.env.DB_URL || 'mongodb://localhost/beacon'
 
 var tag = 'DB';
 

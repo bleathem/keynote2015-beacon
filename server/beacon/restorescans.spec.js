@@ -1,6 +1,6 @@
 'use strict';
 process.env.NODE_ENV = 'test';
-process.env.DB_URL = 'mongodb://localhost/beaconlocation-test'
+process.env.DB_URL = 'mongodb://localhost/beacon-test'
 
 var _ = require('underscore')
   , app = require('./main/app')
