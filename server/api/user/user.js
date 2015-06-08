@@ -9,7 +9,7 @@ var users = [];
 var tag = 'USER';
 
 var userInit = Rx.Observable.create(function (observer) {
-  console.log('Getting registration users');
+  console.log(tag, 'Getting registration users');
   request.get({
     url: process.env.NODE_ENV === 'production'
       ? 'https://summitdemo-540ty4j5jnfp0dusuik5kldm-rht-summit-prod.mbaas2.rht.feedhenry.com/registration'
@@ -19,6 +19,7 @@ var userInit = Rx.Observable.create(function (observer) {
   , function (err, res, body) {
       var enqueueCount;
       if (res && res.statusCode === 200 && body) {
+        console.log(tag, 'Retrieved registration users');
         observer.onNext(JSON.parse(body));
         observer.onCompleted();
       } else {
