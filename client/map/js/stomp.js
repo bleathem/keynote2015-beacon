@@ -14,16 +14,28 @@ var retryFunction = function(errors) {
 };
 
 d3demo.stomp = (function stompFeed(d3, Rx) {
-  var live = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/live')
+  var liveSource = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/live')
   .retryWhen(retryFunction)
   .map(function(json) {
     return JSON.parse(json.data);
   })
-  .filter(function(data) {
+  .share();
+
+  var scan = liveSource.filter(function(data) {
     return data.type === 'scan';
-  }).map(function(data) {
+  })
+  .map(function(data) {
     return data.data;
   });
+
+  var scans = liveSource.filter(function(data) {
+    return data.type === 'scanBundle';
+  })
+  .flatMap(function(data) {
+    return data.data;
+  });
+
+  var live = Rx.Observable.merge(scan, scans);
 
   var playback = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/playback')
   .retryWhen(retryFunction)

@@ -30,11 +30,12 @@ module.exports = function(server) {
     clients[id] = ws;
     ws.id = id;
     restoreScans().then(function(scans) {
-      // ws.send('hello');
       console.log(tag, 'Restoring', scans.length, 'scans');
-      scans.forEach(function(scan) {
-        clients[id].send(JSON.stringify({type: 'scan', data: scan}));
-      })
+      if (ws.readyState === ws.OPEN) {
+        ws.send(JSON.stringify({type: 'scanBundle', data: scans}));
+      } else {
+        console.log(tag, 'ws not open, unable to restore scans');
+      }
     }, function(err) {
       console.err(tag, err);
     })
