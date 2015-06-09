@@ -13,4 +13,7 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
   created: { type: Date, default: Date.now }
 });
 
-module.exports = exports = mongoose.model('Scan', ScanSchema);
+module.exports = exports = {
+  Scan: mongoose.model('Scan', ScanSchema)
+, ScanLatest: mongoose.model('ScanLatest', ScanSchema)
+};

@@ -5,7 +5,7 @@ process.env.DB_URL = 'mongodb://localhost/beacon-test'
 var request = require('supertest')
   , app = require('../../main/app')
   , _ = require('underscore')
-  , Scan = require('./scan_model')
+  , Scan = require('./scan_model').Scan
   , mongoose = require('mongoose')
   , should = require('should')
   ;

@@ -2,7 +2,7 @@
 
 var WebSocketServer = require('ws').Server
   , live = require('../beacon-live')
-  , restoreScans = require('../restorescans').restoreScans
+  , restoreScans = require('../restorescans')
   , Rx = require('rx')
   ;
 
@@ -30,9 +30,12 @@ module.exports = function(server) {
     var id = count++;
     clients[id] = ws;
     ws.id = id;
-    Rx.Observable.fromPromise(restoreScans())
+    console.log(tag, 'Starting restore query');
+    var scans = restoreScans.restoreScans().share();
+    scans.buffer(scans.debounce(5))
       .tap(function(scanBundle) {
         console.log(tag, 'Restoring', scanBundle.length, 'scans');
+        // console.log(scanBundle);
         if (ws.readyState === ws.OPEN) {
           clients[id].send(JSON.stringify({type: 'scanBundle', data: scanBundle}));
         } else {
@@ -54,6 +57,7 @@ module.exports = function(server) {
       .subscribeOnError(function(err) {
         console.log(err.stack || err);
       });
+
     console.log(tag, 'Peer #' + id + ' connected to /live.');
   });
 

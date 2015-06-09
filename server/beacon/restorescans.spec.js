@@ -4,7 +4,7 @@ process.env.DB_URL = 'mongodb://localhost/beacon-test'
 
 var _ = require('underscore')
   , app = require('./main/app')
-  , Scan = require('../api/scan/scan_model')
+  , Scan = require('../api/scan/scan_model').Scan
   , mongoose = require('mongoose')
   , should = require('should')
   , restorescans = require('./restorescans')

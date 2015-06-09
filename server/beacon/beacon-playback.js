@@ -3,7 +3,7 @@
 var Rx = require('rx')
   , RxNode = require('rx-node')
   , convertLocation = require('../api/location/location_controllers').convertLocation
-  , Scan = require('../api/scan/scan_model')
+  , Scan = require('../api/scan/scan_model').Scan
   , getUser = require('../api/user/user.js').getUser
   , debuglog = require('debuglog')('playback')
   ;

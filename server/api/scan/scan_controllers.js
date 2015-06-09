@@ -1,6 +1,6 @@
 'use strict';
 
-var Scan = require('./scan_model')
+var Scan = require('./scan_model').Scan
   ;
 
 module.exports = exports = {

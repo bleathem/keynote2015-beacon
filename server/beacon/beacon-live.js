@@ -1,7 +1,8 @@
 'use strict';
 
 var Rx = require('rx')
-  , Scan = require('../api/scan/scan_model')
+  , Scan = require('../api/scan/scan_model').Scan
+  , ScanLatest = require('../api/scan/scan_model').ScanLatest
   , request = require('request')
   , convertLocation = require('../api/location/location_controllers').convertLocation
   , stomp = require('./stomp')
@@ -20,13 +21,19 @@ var pushSettings = {
 };
 
 var saveScan = function(scan) {
-  Scan.create({
+  var newScan = {
     beaconId: scan.beaconId
   , locationCode: scan.locationCode
   , type: scan.type
   , retransmit: scan.retransmit
   , timestamp: scan.timestamp
-  }).then(function (createdScan) {
+  };
+  ScanLatest.findOneAndUpdate({beaconId: newScan.beaconId}, newScan, {upsert: true}).then(function() {
+    //no-op
+  }, function(error) {
+    console.log(tag, 'Error saving ScanLatest: ', error);
+  });
+  Scan.create(newScan).then(function (createdScan) {
     // console.log(tag, 'Saved scan for beacon: ', createdScan.beaconId);
     // process.stdout.write('.');
     if (!scan.retransmit) {
