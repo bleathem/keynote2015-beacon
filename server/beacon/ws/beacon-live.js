@@ -32,9 +32,11 @@ module.exports = function(server) {
     ws.id = id;
     console.log(tag, 'Starting restore query');
     var scans = restoreScans.restoreScans().share();
+    var startTime = new Date().getTime();
     scans.buffer(scans.debounce(5))
       .tap(function(scanBundle) {
-        console.log(tag, 'Restoring', scanBundle.length, 'scans');
+        var restoreTime = new Date().getTime();
+        console.log(tag, 'Restoring', scanBundle.length, 'scans. (', restoreTime - startTime, 'ms )');
         // console.log(scanBundle);
         if (ws.readyState === ws.OPEN) {
           clients[id].send(JSON.stringify({type: 'scanBundle', data: scanBundle}));
