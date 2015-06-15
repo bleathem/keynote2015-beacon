@@ -26,9 +26,15 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
     return Math.floor(Math.random() * (max - min) + min);
   };
 
-  var getColor = function(temp) {
-    var hue = 270/(temp/1000 + 1);
-    var color = 'hsl(' + [Math.floor(hue), '70%', '50%'] + ')'
+  var getColor = function(temp, grayScale) {
+    var hue = 1000 * 270/(temp + 1000);
+    if (!hue) {
+      debugger;
+    }
+    var color = grayScale
+      ? 'hsl(' + [Math.floor(hue), '70%', '20%'] + ')'
+      : 'hsl(' + [Math.floor(hue), '70%', '50%'] + ')'
+    // console.log(color);
     return color;
   };
 
@@ -87,6 +93,7 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
 
   var stepSize = 0.2 //d3demo.config.playback.rate > 100 ? 0.1 : 0.2;
   var stepForce = function(event) {
+    var selectedNodesLength = getSelectedNodes()[0].length;
     var k = stepSize * event.alpha;
     // Push nodes toward their designated focus.
     var now = new Date().getTime();
@@ -102,6 +109,7 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
         , y = d.focus === -1 ? d.y_i : foci[d.focus].y
       d.y += (y - d.y) * k;
       d.x += (x - d.x) * k;
+      d.unselected = ! (selectedNodesLength === 0 || d.selected );
     });
 
     nodes.attr("cx", function(d) { return d.x; })
@@ -112,14 +120,20 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
              : d.present ? 5 : 2;
           })
          .style('fill', function(d) {
+           var grayScale = d.unselected;
            if (d.present) {
-             return getColor(now - d.checkInTimeInternal);
+             return getColor(now - d.checkInTimeInternal, grayScale);
+           } else if (d.checkOutTimeInternal && d.checkInTimeInternal) {
+             return getColor(d.checkOutTimeInternal - d.checkInTimeInternal, grayScale);
            } else {
-             return getColor(d.checkOutTimeInternal - d.checkInTimeInternal);
+             return getColor(0, grayScale);
            }
          })
          .classed('node', function(d) {
            return d.focus !== -1;
+         })
+         .classed('unselected', function(d) {
+           return d.unselected;
          });
 
   };
@@ -162,18 +176,20 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
   };
 
   function particle(dataNode) {
-    var particle = svg.insert('circle')
-        .attr('class', 'particle')
-        .attr('cx', dataNode.x)
-        .attr('cy', dataNode.y)
-        .attr('r', 5)
-        .style('stroke-opacity', 1)
-      .transition()
-        .duration(1000)
-        .ease('quad-out')
-        .attr('r', 50)
-        .style('stroke-opacity', .1)
-      .remove();
+    if (! dataNode.unselected) {
+      var particle = svg.insert('circle')
+          .attr('class', 'particle')
+          .attr('cx', dataNode.x)
+          .attr('cy', dataNode.y)
+          .attr('r', 5)
+          .style('stroke-opacity', 1)
+        .transition()
+          .duration(1000)
+          .ease('quad-out')
+          .attr('r', 50)
+          .style('stroke-opacity', .1)
+        .remove();
+    };
   };
 
   return {
@@ -185,5 +201,6 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
   , getSelectedNodes: getSelectedNodes
   , getNodeCount: getNodeCount
   , particle: particle
+  , getColor: getColor
   };
 })(d3, Rx);

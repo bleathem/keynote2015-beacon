@@ -5368,6 +5368,9 @@ svg {
   stroke: #ffffff;
   stroke-width: 1px;
 }
+.node.unselected {
+  stroke: rgba(255, 255, 255, 0.5);
+}
 .particle {
   fill: none;
   stroke: lightyellow;
@@ -5378,8 +5381,8 @@ svg {
   stroke-width: 2px;
 }
 .selected {
-  stroke: rgba(0, 0, 0, 0.5);
-  stroke-width: 2px;
+  stroke: #ffffff;
+  stroke-width: 3px;
 }
 .progress {
   width: auto;

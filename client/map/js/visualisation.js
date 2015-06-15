@@ -72,7 +72,7 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
 
   var infoPanelDataNode = null;
   var updateUserInfoPanel = function(data) {
-    if (d3demo.forcemap.getSelectedNodes().length > 1) {
+    if (d3demo.forcemap.getSelectedNodes()[0].length > 1) {
       return;
     }
     infoPanelDataNode = data;
@@ -153,7 +153,6 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
       return true;
     });
     if (logTracker.spans.length < 50) {
-      var selectedNodes = d3demo.forcemap.getSelectedNodes();
       if (! infoPanelDataNode || scan.user.id === infoPanelDataNode.user.id) {
         logTracker.spans.push(createMessageElement(scan));
       };
