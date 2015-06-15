@@ -284,10 +284,18 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
   };
 
   var live = function() {
-    var streams = tap(d3demo.stomp.live);
+    var clockStream = Rx.Observable.interval(1000).map(function() {
+      var time = {
+        timestamp: new Date().getTime(),
+        percent: 0
+      };
+      return time;
+    });
+    var streams = tap(d3demo.stomp.live, clockStream);
     d3demo.forcemap.start();
 
     streams.scans.subscribeOnError(errorHandler);
+    streams.clock.subscribeOnError(errorHandler);
   };
 
   var playback = function() {
