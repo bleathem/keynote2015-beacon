@@ -6,9 +6,10 @@ var Rx = require('rx')
   ;
 
 var GENERAL_SESSIONS_ID = 1
+  , STAGE_LEFT = 2, STAGE_RIGHT=3
   , ENTRANCE_ID = 0
-  , LUNCH1_ID = 2
-  , LUNCH2_ID = 3
+  , LUNCH1_ID = 4
+  , LUNCH2_ID = 5
 
 var KEYNOTE_1_START_MINUTES = 10*60
   , KEYNOTE_2_START_MINUTES = 14*60
@@ -31,15 +32,22 @@ var getRandomInt = function (min, max) {
 };
 
 var locationWeights = [
-  4, 0, 0, 0, 30, 80,
+  4, 0, 0, 0, 0, 0,
+  80, 80,
   30, 20, 50, 50, 35, 30,
   10, 10, 65];
 var getLocationWeight = function(location, minutes) {
   if (location.id === GENERAL_SESSIONS_ID && KEYNOTE_1_START_MINUTES - 10 <= minutes && minutes <= KEYNOTE_1_START_MINUTES + 10) {
     return 6000;
   };
-  if (location.id === GENERAL_SESSIONS_ID && KEYNOTE_2_START_MINUTES - 10 <= minutes && minutes <= KEYNOTE_2_START_MINUTES + 10) {
-    return 3000;
+  if (KEYNOTE_2_START_MINUTES - 10 <= minutes && minutes <= KEYNOTE_2_START_MINUTES + 10) {
+    if (location.id === GENERAL_SESSIONS_ID) {
+      return 3000;
+    } else if (location.id === STAGE_LEFT) {
+      return 20;
+    } else if (location.id === STAGE_RIGHT) {
+      return 20;
+    }
   };
   if ((location.id === LUNCH1_ID || location.id === LUNCH2_ID) && LUNCH_TIME - 5 <= minutes && minutes <= LUNCH_TIME + 25) {
     return 3000;
