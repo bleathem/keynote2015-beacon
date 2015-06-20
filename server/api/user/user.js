@@ -45,7 +45,7 @@ var userInit = Rx.Observable.create(function (observer) {
 .map(function(data, index) {
   var user = {
     id: index
-  , name: data.fields.name
+  , name: data.fields.showName ? data.fields.name : 'User ' + index
   , beaconId: data.fields.beaconId
   }
   idMap[user.beaconId] = index;
