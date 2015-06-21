@@ -135,7 +135,7 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
     var element = baseNode.cloneNode(true);
     var li = element.childNodes[0];
     li.childNodes[1].textContent = formatTime(scan.timestamp);
-    li.childNodes[2].textContent = 'User ' + scan.user.id;
+    li.childNodes[2].textContent = scan.user.name || 'Beacon ' + scan.user.id;
     li.childNodes[3].textContent = scan.location.name;
     return element;
   }
