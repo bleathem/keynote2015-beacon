@@ -8,10 +8,9 @@ var users = _.range(0, 325).map(function(index) {
   return {
     id: index
   , beaconId: index
+  , name: ''
   }
 })
-
-console.log(users);
 
 var tag = 'USER';
 
@@ -48,7 +47,7 @@ var userInit = Rx.Observable.create(function (observer) {
 .flatMap(function(array) {
   return array;
 })
-.map(function(data, index) {
+.map(function(data) {
   var beaconId = data.fields.beaconId;
   var index = beaconId - 1;
   try {
@@ -59,12 +58,6 @@ var userInit = Rx.Observable.create(function (observer) {
 })
 .tapOnCompleted(function() {
   console.log('Users updated');
-  for (var i = users.length; i < 300; i++) {
-    users.push({
-      id: i
-    , name: 'Firstname' + i + ' Lastname' + i
-    });
-  };
 });
 
 Rx.Observable.interval(20000).flatMap(function() {
@@ -77,9 +70,10 @@ var lastIndex = 0;
 
 var getUser = function(beaconId) {
   var index = beaconId - 1;
-  return users[beaconId] || {
+  return users[index] || {
     id: beaconId
   , beaconId: beaconId
+  , name: ''
   };
 };
 
