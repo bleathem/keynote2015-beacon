@@ -2,9 +2,16 @@
 
 var Rx = require('rx')
   , request = require('request')
+  , _ = require('underscore')
 
-var idMap = {};
-var users = [];
+var users = _.range(0, 325).map(function(index) {
+  return {
+    id: index
+  , beaconId: index
+  }
+})
+
+console.log(users);
 
 var tag = 'USER';
 
@@ -19,7 +26,6 @@ var userInit = Rx.Observable.create(function (observer) {
   , function (err, res, body) {
       var enqueueCount;
       if (res && res.statusCode === 200 && body) {
-        console.log(tag, 'Retrieved registration users');
         observer.onNext(JSON.parse(body));
         observer.onCompleted();
       } else {
@@ -43,15 +49,16 @@ var userInit = Rx.Observable.create(function (observer) {
   return array;
 })
 .map(function(data, index) {
-  var user = {
-    id: index
-  , name: data.fields.showName ? data.fields.name : 'User ' + index
-  , beaconId: data.fields.beaconId
+  var beaconId = data.fields.beaconId;
+  var index = beaconId - 1;
+  try {
+    users[index].name = data.fields.showName ? data.fields.name : 'Beacon ' + beaconId;
+  } catch(error) {
+    console.log('Unknown beaconId', beaconId);
   }
-  idMap[user.beaconId] = index;
-  users.push(user);
 })
 .tapOnCompleted(function() {
+  console.log('Users updated');
   for (var i = users.length; i < 300; i++) {
     users.push({
       id: i
@@ -60,22 +67,23 @@ var userInit = Rx.Observable.create(function (observer) {
   };
 });
 
+Rx.Observable.interval(20000).flatMap(function() {
+  return userInit;
+}).subscribeOnError(function(error) {
+  console.log(error);
+});
+
 var lastIndex = 0;
 
 var getUser = function(beaconId) {
-  if (! (beaconId in idMap)) {
-    idMap[beaconId] = lastIndex;
-    users[lastIndex].beaconId = beaconId;
-    lastIndex++;
+  var index = beaconId - 1;
+  return users[beaconId] || {
+    id: beaconId
+  , beaconId: beaconId
   };
-  var index = idMap[beaconId];
-  return users[index];
 };
 
 module.exports = exports = {
-  getUsers: function() {
-    return users;
-  }
-, getUser: getUser
+  getUser: getUser
 , userInit: userInit
 };

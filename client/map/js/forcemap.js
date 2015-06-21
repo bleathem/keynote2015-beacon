@@ -48,7 +48,7 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
 
     // define the data
     dataNodes = [];
-    dataNodes = d3.range(300).map(function(index) {
+    dataNodes = d3.range(326).map(function(index) {
       var x = getRandomInt(foci[0].x - 10, foci[0].x + 10)
         , y = getRandomInt(height+50, height + 300);
       // x = 200, y= 200;
