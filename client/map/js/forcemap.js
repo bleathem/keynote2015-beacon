@@ -143,12 +143,18 @@ d3demo.forcemap = (function visualisation(d3, Rx) {
   }
 
   var getNodeById = function(id) {
+   if (id > 325) {
+     id = 325;
+   }
    return nodes.filter(function(d) {
      return d.id == id;
    });
   };
 
   var getDataNodeById = function(id) {
+    if (id > 325) {
+      id = 325;
+    }
    return dataNodes[id];
   };
 
