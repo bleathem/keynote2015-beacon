@@ -4,7 +4,7 @@ var Rx = require('rx')
   , request = require('request')
   , _ = require('underscore')
 
-var users = _.range(0, 325).map(function(index) {
+var users = _.range(0, 326).map(function(index) {
   return {
     id: index
   , beaconId: index
@@ -49,9 +49,8 @@ var userInit = Rx.Observable.create(function (observer) {
 })
 .map(function(data) {
   var beaconId = data.fields.beaconId;
-  var index = beaconId - 1;
   try {
-    users[index].name = data.fields.showName ? data.fields.name : 'Beacon ' + beaconId;
+    users[beaconId].name = data.fields.showName ? data.fields.name : 'Beacon ' + beaconId;
   } catch(error) {
     console.log('Unknown beaconId', beaconId);
   }
@@ -66,11 +65,8 @@ Rx.Observable.interval(20000).flatMap(function() {
   console.log(error);
 });
 
-var lastIndex = 0;
-
 var getUser = function(beaconId) {
-  var index = beaconId - 1;
-  return users[index] || {
+  return users[beaconId] || {
     id: beaconId
   , beaconId: beaconId
   , name: ''
