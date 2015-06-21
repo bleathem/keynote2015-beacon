@@ -72,9 +72,6 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
 
   var infoPanelDataNode = null;
   var updateUserInfoPanel = function(data) {
-    if (d3demo.forcemap.getSelectedNodes()[0].length > 1) {
-      return;
-    }
     infoPanelDataNode = data;
     d3.timer(function() {
       if (data.focus < 0) {
