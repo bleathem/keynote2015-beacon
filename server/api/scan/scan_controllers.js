@@ -16,7 +16,8 @@ module.exports = exports = {
 , getScans: function(req, res, next) {
     var limit = req.params.limit || null;
     return Scan.find({
-      beaconId: req.params.beaconId
+      beaconId: req.params.beaconId,
+      retransmit: false
     }, null, {
       skip: 0,
       limit: limit,
