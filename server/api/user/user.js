@@ -17,7 +17,7 @@ var tag = 'USER';
 var userInit = Rx.Observable.create(function (observer) {
   console.log(tag, 'Getting registration users');
   request.get({
-    url: process.env.NODE_ENV === 'production'
+    url: true || process.env.NODE_ENV === 'production'
       ? 'https://summitdemo-540ty4j5jnfp0dusuik5kldm-rht-summit-prod.mbaas2.rht.feedhenry.com/registration'
       : 'https://summitdemo-540ty4j5jnfp0dusuik5kldm-rht-summit-dev.mbaas2.rht.feedhenry.com/registration'
   , timeout: 20000
@@ -50,7 +50,7 @@ var userInit = Rx.Observable.create(function (observer) {
 .map(function(data) {
   var beaconId = data.fields.beaconId;
   try {
-    users[beaconId].name = data.fields.showName === 'true' ? data.fields.name : 'Beacon ' + beaconId;
+    users[beaconId].name = data.fields.showName === true ? data.fields.name : 'Beacon ' + beaconId;
   } catch(error) {
     console.log('Unknown beaconId', beaconId);
   }
