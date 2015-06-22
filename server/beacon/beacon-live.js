@@ -45,8 +45,12 @@ var saveScan = function(scan) {
   });
 };
 
+var lastNotification = {};
+
 var notification = function(scan) {
-  if (process.env.NODE_ENV !== 'production') {
+  var start = new Date();
+  start.setHours(0,0,0,0);
+  if (process.env.NODE_ENV !== 'production' || process.env.PUSH_ENABLED !== 'true' || lastNotification[scan.beaconId] === start) {
     return;
   };
   var message = {
@@ -66,6 +70,7 @@ var notification = function(scan) {
   // Fire and forget
   agSender.Sender(pushUrl).send(message, settings)
     .on('success', function(response) {
+      lastNotification[scan.beaconId] = start;
       debuglog('agSender success called', response);
     })
     .on('error', function(err) {
