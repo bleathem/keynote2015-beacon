@@ -76,7 +76,7 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
     d3.timer(function() {
       if (data.focus < 0) {
         hideUserInfoPanel();
-        return;
+        return true;
       }
       var div = d3.select('.userinfo');
       div.style({'display': 'block'});
