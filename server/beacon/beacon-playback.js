@@ -27,7 +27,9 @@ var counter = Rx.Observable.interval(25)
 var getScanFeed = function(days, hour, minute) {
   var date = new Date();
   console.log('days', days, 'hour', hour, 'min', minute);
-  date.setDate(date.getDate() - days);
+  if (days) {
+    date.setDate(date.getDate() - days);
+  }
   date.setHours(hour,minute,0,0);
   console.log('Replay start date', date);
   var query = Scan.find({retransmit: false, timestamp: {$gte: date}}, {_id: 0, created: 0})

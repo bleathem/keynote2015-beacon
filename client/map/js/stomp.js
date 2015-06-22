@@ -58,9 +58,9 @@ d3demo.stomp = (function stompFeed(d3, Rx) {
         console.log('Error parsing minute');
       }
       var config = {
-        days: days || 1,
-        hour: hour || 7,
-        minute: minute || 55
+        days: days || days === 0 ? days : 1,
+        hour: hour || hour === 0 ? hour : 7,
+        minute: minute || minute === 0 ? minute : 55
       }
       console.log('Replay config', config);
 
