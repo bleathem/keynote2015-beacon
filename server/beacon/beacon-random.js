@@ -2,7 +2,7 @@
 
 var Rx = require('rx')
   , locations = require('../api/location/location_controllers').locations
-  , getUsers = require('../api/user/user.js').getUsers
+  , users = require('../api/user/user.js')
   ;
 
 var GENERAL_SESSIONS_ID = 1
@@ -136,13 +136,12 @@ var intervalFromEvents = function(events) {
 };
 
 var randomScans = counter.flatMap(function(tick) {
-  var users = getUsers();
   var scans = [];
   var rush = (tick.minutes + 5) % 60;
   if (rush > 30) { rush = 60 - rush};
   var numEvents = rush < 10 ? 100 - rush : getRandomInt(0,3); // simulate a rush
   for (var n = 0; n < numEvents; n++) {
-    var user = users[getRandomInt(0, users.length)];
+    var user = users.getUser(getRandomInt(0, 300));
     var scan = createRandomScan(user, tick.minutes);
     var eventTimeOffest = getRandomInt(0, 60).toFixed(4);
     scan.timestamp = tick.timestamp + eventTimeOffest * 1000
