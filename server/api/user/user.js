@@ -8,7 +8,7 @@ var users = _.range(0, 326).map(function(index) {
   return {
     id: index
   , beaconId: index
-  , name: ''
+  , name: 'Beacon ' + index
   }
 })
 
@@ -50,7 +50,7 @@ var userInit = Rx.Observable.create(function (observer) {
 .map(function(data) {
   var beaconId = data.fields.beaconId;
   try {
-    users[beaconId].name = data.fields.showName ? data.fields.name : 'Beacon ' + beaconId;
+    users[beaconId].name = data.fields.showName === 'true' ? data.fields.name : 'Beacon ' + beaconId;
   } catch(error) {
     console.log('Unknown beaconId', beaconId);
   }
