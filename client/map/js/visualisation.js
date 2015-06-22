@@ -43,16 +43,16 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
   };
 
   var selectNodes = function(selectedNodes) {
-    selectedNodes.data().forEach(function(d) {
+    var data = selectedNodes.data();
+    data.forEach(function(d) {
       d.selected = true;
     });
     d3.timer(function() {
       selectedNodes.classed('selected', function(d) { return d.selected; });
       return true;
     });
-    if (selectedNodes[0].length === 1) {
-      var data = selectedNodes.datum();
-      updateUserInfoPanel(data);
+    if (data.length === 1) {
+      updateUserInfoPanel(data[0]);
     } else {
       hideUserInfoPanel();
     }
@@ -74,10 +74,11 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
   var updateUserInfoPanel = function(data) {
     infoPanelDataNode = data;
     d3.timer(function() {
-      if (data.focus < 0) {
-        hideUserInfoPanel();
-        return true;
-      }
+      // if (data.focus < 0) {
+      //   hideUserInfoPanel();
+      //   return true;
+      // }
+      var location = d3demo.layout.getLocations()[data.focus];
       var div = d3.select('.userinfo');
       div.style({'display': 'block'});
       div.select('.id_v').text(data.user.id);
@@ -85,7 +86,7 @@ d3demo.visualisation = (function visualisation(d3, Rx) {
       div.select('.name_v').text(data.user.name);
       div.select('.checkin_v').text(formatTime(data.checkInTime));
       div.select('.checkout_v').text(formatTime(data.checkOutTime));
-      div.select('.location_v').text(d3demo.layout.getLocations()[data.focus].name);
+      div.select('.location_v').text(location ? location.name : '');
       return true;
     });
   };

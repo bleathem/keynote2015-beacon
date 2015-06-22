@@ -71,12 +71,9 @@ d3demo.controls = (function controls(d3, Rx) {
       return;
     }
     var selectedNodes = d3demo.forcemap.getNodesByName(filterValue);
-    populateComboBox(selectedNodes.data());
-    if (selectedNodes[0].length > 0) {
-      d3demo.visualisation.selectNodes(selectedNodes);
-    } else {
-      d3demo.visualisation.hideUserInfoPanel();
-    }
+    var data = selectedNodes.data();
+    populateComboBox(data);
+    d3demo.visualisation.selectNodes(selectedNodes);
   })
   .subscribeOnError(errorHandler);
 
@@ -89,7 +86,11 @@ d3demo.controls = (function controls(d3, Rx) {
       if (data.length <= 1) {
         var typeahead = d3.select('.typeahead').style({'display': 'none'}).node;
       } else {
-        data.forEach(function(d) {
+        data.filter(function(d) {
+          return d.focus >= 0;
+        })
+        .forEach(function(d) {
+          console.log(d)
           var option = document.createElement('li');
           var link = document.createElement('a');
           link.href="#";
