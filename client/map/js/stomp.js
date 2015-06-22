@@ -37,7 +37,44 @@ d3demo.stomp = (function stompFeed(d3, Rx) {
 
   var live = Rx.Observable.merge(scan, scans);
 
-  var playback = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/playback')
+  var openObserverForPlayback = Rx.Observer.create(
+    function(open) {
+      var days;
+      try {
+        days = parseInt(d3demo.config.getParameterByName('days'));
+      } catch(e) {
+        console.log('Error parsing days');
+      }
+      var hour;
+      try {
+        hour = parseInt(d3demo.config.getParameterByName('hour'));
+      } catch(e) {
+        console.log('Error parsing hour');
+      }
+      var minute;
+      try {
+        minute = parseInt(d3demo.config.getParameterByName('minute'));
+      } catch(e) {
+        console.log('Error parsing minute');
+      }
+      var config = {
+        days: days || 1,
+        hour: hour || 7,
+        minute: minute || 55
+      }
+      console.log('Replay config', config);
+
+      var ws = open.target;
+      ws.send(JSON.stringify({
+        type: 'subscribe'
+      , data: config
+      }));    }
+  , function (err) {
+      console.log(error);
+    }
+  );
+
+  var playback = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/playback', null, openObserverForPlayback)
   .retryWhen(retryFunction)
   .map(function(json) {
     return JSON.parse(json.data);

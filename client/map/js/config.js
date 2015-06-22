@@ -11,7 +11,8 @@ d3demo.config = (function() {
   }
 
   return {
-      backend: {
+      getParameterByName
+    , backend: {
         ws: 'ws://localhost:9000'
       }
     , playback: {

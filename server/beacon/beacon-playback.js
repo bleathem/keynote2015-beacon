@@ -24,12 +24,12 @@ var counter = Rx.Observable.interval(25)
     // return tick.minutes <= START_MINUTES + 20;
   });
 
-
-var getScanFeed = function() {
+var getScanFeed = function(days, hour, minute) {
   var date = new Date();
-  date.setDate(date.getDate() - 1);
-  date.setHours(7,30,0,0);
-  console.log(date);
+  console.log('days', days, 'hour', hour, 'min', minute);
+  date.setDate(date.getDate() - days);
+  date.setHours(hour,minute,0,0);
+  console.log('Replay start date', date);
   var query = Scan.find({retransmit: false, timestamp: {$gte: date}}, {_id: 0, created: 0})
     .sort({'timestamp': 1})
     .lean();
