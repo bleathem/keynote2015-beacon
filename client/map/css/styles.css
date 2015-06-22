@@ -5404,7 +5404,7 @@ svg {
   display: block;
   vertical-align: bottom;
   position: absolute;
-  bottom: 35%;
+  bottom: 10px;
   left: 10px;
   background: #ffffff;
   padding: 5px;
