@@ -3,8 +3,8 @@
 var locations = [
   { id: 0, x_i: 370, y_i: 1270, name: 'Entrance', code: 'Entrance'}
 , { id: 1, x_i: 310, y_i: 510, name: 'General Sessions', code: 'General'}
-, { id: 2, x_i: 90, y_i: 510, name: 'Stage Left', code: 'GenStageL'}
-, { id: 3, x_i: 90, y_i: 510, name: 'Stage Right', code: 'GenStageR'}  // unsued
+, { id: 2, x_i: 310, y_i: 510, name: 'Stage Left', code: 'GenStageL'}
+, { id: 3, x_i: 310, y_i: 510, name: 'Stage Right', code: 'GenStageR'}  // unsued
 , { id: 4, x_i: 860, y_i: 240, name: 'Lunch 1', code: 'LunchL'}
 , { id: 5, x_i: 1590, y_i: 210, name: 'Lunch 2', code: 'LunchR'}
 , { id: 6, x_i: 860, y_i: 600, name: 'Red Hat Booth 1', code: 'BoothL'}
