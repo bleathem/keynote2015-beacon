@@ -2,18 +2,18 @@
 
 var d3demo = d3demo || {};
 
-var retryFunction = function(errors) {
-  return errors.scan(0, function(errorCount, err) {
-    console.log('Attmepting a re-connect (#' + errorCount + ')');
-    return errorCount + 1;
-  })
-  .takeWhile(function(errorCount) {
-    return errorCount < 50;
-  })
-  .delay(500);
-};
-
 d3demo.stomp = (function stompFeed(d3, Rx) {
+  var retryFunction = function(errors) {
+    return errors.scan(0, function(errorCount, err) {
+      console.log('Attmepting a re-connect (#' + errorCount + ')');
+      return errorCount + 1;
+    })
+    .takeWhile(function(errorCount) {
+      return errorCount < 50;
+    })
+    .delay(500);
+  };
+
   var liveSource = Rx.DOM.fromWebSocket(d3demo.config.backend.ws + '/live')
   .retryWhen(retryFunction)
   .map(function(json) {
