@@ -5,26 +5,27 @@ A location-scanner multi-foci force-layout built using d3.js and Rx.js.
 Pre-requisutes:
 
 * node.js (installed globally)
-* gulp.js (installed globally)
+* mongodb
+* _for development_: gulp.js (installed globally)
 
-= To install the project
+= To install and run the project
 
 Execute the following commands in your local clone of this repository:
 [source, bash]
 ----
-> npm install
+> npm install --production
+> npm start
 ----
 
-= To run the project:
+= To develop the project:
 
-The project has 2 pieces:
+== Install gulp
 
-* Beacon-location demo
-** Mongo is required
-* Thousand-container demo
-** Mongo is optional
-
-Note: Mongo is optional only on Node 0.10.  Node 0.12 will fail hard if it can't connect to mongo.
+Make sure gulp.js is installed globally
+[source, bash]
+----
+> npm install -g gulp
+----
 
 == Start mongo
 Download mongod from the mongodb website, and place `mongod` on your path:

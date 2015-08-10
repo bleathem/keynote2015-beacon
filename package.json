@@ -4,8 +4,10 @@
   "description": "A D3/Rx.JS example",
   "repository": "https://github.com/bleathem/locationforcelayout",
   "scripts": {
-    "start": "./node_modules/gulp/bin/gulp.js docker",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run mongo & npm run serve",
+    "serve": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mongo": "mongod --dbpath ./data"
   },
   "main": "server/server.js",
   "author": "Brian Leathem",
