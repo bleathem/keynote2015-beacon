@@ -5332,18 +5332,19 @@ h2,
 }
 .map {
   float: left;
-  background-image: url(../img/map.png);
-  /* 2393 x 2004 */
+  background-image: url(../img/new_map.png);
+  /* square */
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left top;
-  background-color: #180034;
+  background-color: #e9e5dd;
   position: relative;
 }
 svg {
   position: relative;
 }
 .map-inset {
+  display: none;
   opacity: .9;
   background: #fff;
   border-bottom: 1px solid #222;
@@ -5404,7 +5405,7 @@ svg {
   display: block;
   vertical-align: bottom;
   position: absolute;
-  bottom: 35%;
+  bottom: 10px;
   left: 10px;
   background: #ffffff;
   padding: 5px;
