@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('underscore')
-  , template = require('gulp-template')
   , rename = require("gulp-rename")
   ;
 
@@ -25,12 +24,6 @@ var opts = {
 process.env.PORT = opts.frontend.port;
 
 module.exports = function(gulp, baseOpts) {
-  gulp.task('config', function () {
-    return gulp.src('client/map/js/config.tpl.js')
-        .pipe(template({backend_ws: opts.backend.ws}))
-        .pipe(rename('config.js'))
-        .pipe(gulp.dest('client/map/js'));
-  });
   var newOpts = _.extend({}, baseOpts, opts);
   return newOpts;
 };

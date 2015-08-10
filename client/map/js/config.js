@@ -13,7 +13,7 @@ d3demo.config = (function() {
   return {
       getParameterByName
     , backend: {
-        ws: 'ws://localhost:9000'
+        ws: 'ws://' + window.location.host
       }
     , playback: {
         rate: getParameterByName('rate') || 600
