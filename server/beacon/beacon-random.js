@@ -5,17 +5,9 @@ var Rx = require('rx')
   , users = require('../api/user/user.js')
   ;
 
-var GENERAL_SESSIONS_ID = 1
-  , STAGE_LEFT = 2, STAGE_RIGHT=3
-  , ENTRANCE_ID = 0
-  , LUNCH1_ID = 4
-  , LUNCH2_ID = 5
-
-var KEYNOTE_1_START_MINUTES = 10*60
-  , KEYNOTE_2_START_MINUTES = 14*60
-  , LUNCH_TIME = 12*60
-  , START_MINUTES = 7*60 + 50
-  , END_MINUTES = 18*60;
+var START_MINUTES = 7*60 + 50
+  , END_MINUTES = 18*60
+  ;
 
 var EVENT_DATE = new Date();
 // EVENT_DATE.setDate(EVENT_DATE.getDate() - 1); // yesterday
@@ -31,62 +23,20 @@ var getRandomInt = function (min, max) {
   return Math.floor(getRandom(min,max));
 };
 
-var locationWeights = [
-  4, 0, 0, 0, 0, 0,
-  80, 80,
-  30, 20, 50, 50, 35, 30,
-  10, 10, 65];
-var getLocationWeight = function(location, minutes) {
-  if (location.id === GENERAL_SESSIONS_ID && KEYNOTE_1_START_MINUTES - 10 <= minutes && minutes <= KEYNOTE_1_START_MINUTES + 10) {
-    return 6000;
-  };
-  if (KEYNOTE_2_START_MINUTES - 10 <= minutes && minutes <= KEYNOTE_2_START_MINUTES + 10) {
-    if (location.id === GENERAL_SESSIONS_ID) {
-      return 3000;
-    } else if (location.id === STAGE_LEFT) {
-      return 20;
-    } else if (location.id === STAGE_RIGHT) {
-      return 20;
-    }
-  };
-  if ((location.id === LUNCH1_ID || location.id === LUNCH2_ID) && LUNCH_TIME - 5 <= minutes && minutes <= LUNCH_TIME + 25) {
-    return 3000;
-  };
-  if (location.id === ENTRANCE_ID && minutes > END_MINUTES - 60) {
-    return 6000;
-  };
-  return locationWeights[location.id];
-}
-
 var getRandomLocation = function(minutes) {
-  var totalWeight = locations.reduce(function (sumSoFar, location, index, array) {
-    return sumSoFar + getLocationWeight(location, minutes);
-  }, 0);
-  var random = getRandom(0, totalWeight)
-    , sum = 0
-    , randomLocation;
-  for (var i = 0; i < locations.length; i++) {
-    var location = locations[i];
-    sum += getLocationWeight(location, minutes);
-    if (random < sum) {
-      randomLocation = locations[i];
-      break;
-    }
-  }
-  return randomLocation;
+  var random = getRandomInt(0, locations.length);
+  return locations[random];
 };
 
 var previousScans = {};
 
 var createRandomScan = function (user, minutes) {
   var lastScan = previousScans[user.id];
-  var userLeft = lastScan && lastScan.location.id === ENTRANCE_ID && lastScan.type === 'check-out';
-  var present = lastScan && !userLeft
+  var present = !! lastScan;
   var checkedIn = present && lastScan.type === 'check-in';
-  var atEntrance = present && lastScan.location.id === ENTRANCE_ID;
 
   var scan;
-  if (checkedIn && ! atEntrance) {
+  if (checkedIn) {
     scan = {
       user: user
     , location: lastScan.location
@@ -94,9 +44,7 @@ var createRandomScan = function (user, minutes) {
     }
   } else {
     var location = getRandomLocation(minutes);
-    var type = (location.id == ENTRANCE_ID && (present || minutes > END_MINUTES - 60))
-      ? 'check-out'
-      : 'check-in';
+    var type = (present || minutes > END_MINUTES - 60) ? 'check-out' : 'check-in';
     scan = {
       user: user
     , location: location
