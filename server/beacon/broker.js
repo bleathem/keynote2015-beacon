@@ -4,12 +4,14 @@ var Rx = require('rx')
   , stomp = require('./stomp')
   , debuglog = require('debuglog')('broker')
   , request = require('request')
+  , config = require('../config')
   ;
 
 var tag = 'BROKER';
 
-var username = process.env.AMQ_USER || '';
-var password = process.env.AMQ_PASSWORD || '';
+var username = config.get('AMQ_USER');
+var password = config.get('AMQ_PASSWORD');
+
 var getEnqueueCount = function(url) {
   return Rx.Observable.create(function (observer) {
   request.get({

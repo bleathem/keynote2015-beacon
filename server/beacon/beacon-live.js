@@ -10,6 +10,7 @@ var Rx = require('rx')
   , debuglog = require('debuglog')('live')
   , getUser = require('../api/user/user.js').getUser
   , agSender = require( 'unifiedpush-node-sender' )
+  , config = require('../config')
   ;
 
 var tag = 'LIVE';
@@ -50,7 +51,7 @@ var lastNotification = {};
 var notification = function(scan) {
   var start = new Date();
   start.setHours(0,0,0,0);
-  if (process.env.NODE_ENV !== 'production' || process.env.PUSH_ENABLED !== 'true' || lastNotification[scan.beaconId] === start) {
+  if (! config.get('PUSH_ENABLED') || lastNotification[scan.beaconId] === start) {
     return;
   };
   var message = {

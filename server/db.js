@@ -1,6 +1,8 @@
-var mongoose   = require('mongoose');
+var mongoose   = require('mongoose')
+  , config = require('./config')
+  ;
 
-var dbUrl  = process.env.DB_URL || 'mongodb://localhost/beacon'
+var dbUrl  = config.get('DB_URL');
 
 var tag = 'DB';
 
@@ -30,7 +32,7 @@ module.exports = exports = function (app) {
   process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
 
   try {
-    if (process.env.MONGO_ENABLED !== 'false') {
+    if (config.get('MONGO_ENABLED') !== 'false') {
       console.log(tag, 'Trying to connect to DB ' + dbUrl);
       mongoose.connect(dbUrl);
     };

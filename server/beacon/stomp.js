@@ -3,12 +3,13 @@
 var Rx = require('rx')
   , Stomp = require('stompjs')
   , debuglog = require('debuglog')('stomp')
+  , config = require('../config')
   ;
 
 var tag = 'STOMP';
 
-var username = process.env.AMQ_USER || '';
-var password = process.env.AMQ_PASSWORD || '';
+var username = config.get('AMQ_USER');
+var password = config.get('AMQ_PASSWORD');
 
 var connection = Rx.Observable.create(function (observer) {
   console.log(tag, new Date());
@@ -62,9 +63,7 @@ var getBeaconEventsFeed = function() {
 };
 
 var getBeaconEventsProcessedFeed = function() {
-  var feed = process.env.NODE_ENV === 'production'
-    ? '/queue/Consumer.bl_prod.VirtualTopic.beaconEvents_processed'
-    : '/topic/VirtualTopic.beaconEvents_processed';
+  var feed = config.get('STOMP_FEED');
   return getStompFeed(feed);
 };
 

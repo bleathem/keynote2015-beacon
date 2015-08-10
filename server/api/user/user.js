@@ -3,6 +3,8 @@
 var Rx = require('rx')
   , request = require('request')
   , _ = require('underscore')
+  , config = require('../../config')
+  ;
 
 var users = _.range(0, 326).map(function(index) {
   return {
@@ -17,9 +19,7 @@ var tag = 'USER';
 var userInit = Rx.Observable.create(function (observer) {
   console.log(tag, 'Getting registration users');
   request.get({
-    url: true || process.env.NODE_ENV === 'production'
-      ? 'https://summitdemo-540ty4j5jnfp0dusuik5kldm-rht-summit-prod.mbaas2.rht.feedhenry.com/registration'
-      : 'https://summitdemo-540ty4j5jnfp0dusuik5kldm-rht-summit-dev.mbaas2.rht.feedhenry.com/registration'
+    url:  config.get('USER_ENDPOINT')
   , timeout: 20000
   }
   , function (err, res, body) {

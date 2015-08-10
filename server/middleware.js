@@ -4,7 +4,9 @@
  * MiddleWare for the entire app
 */
 
-var auth = require('basic-auth');
+var auth = require('basic-auth')
+  , config = require('./config')
+  ;
 
 module.exports = exports = {
   logError: function (err, req, res, next) {
@@ -34,12 +36,14 @@ module.exports = exports = {
   },
 
   basicAuth: function(req, res, next) {
-    if (! process.env.BASIC_AUTH_USER || ! process.env.BASIC_AUTH_PASSWORD || req.path.indexOf('/api') === 0) {
+    var _user = config.get('BASIC_AUTH_USER')
+      , _password = config.get('BASIC_AUTH_PASSWORD');
+    if (! _user || ! _password || req.path.indexOf('/api') === 0) {
       next();
       return;
     }
     var credentials = auth(req)
-    if (!credentials || credentials.name !== process.env.BASIC_AUTH_USER || credentials.pass !== process.env.BASIC_AUTH_PASSWORD) {
+    if (!credentials || credentials.name !== _user || credentials.pass !== _password) {
       res.writeHead(401, {
         'WWW-Authenticate': 'Basic realm="example"'
       });

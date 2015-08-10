@@ -2,6 +2,7 @@
 
 var _ = require('underscore')
   , rename = require("gulp-rename")
+  , config = require('../server/config')
   ;
 
 var opts = {
@@ -14,10 +15,10 @@ var opts = {
 , lrPort: 35729
 , frontend: {
     hostname: 'localhost'
-  , port: process.env.PORT || '9000'
+  , port: config.get('PORT')
   }
 , backend: {
-    ws: process.env.WS_HOST || 'ws://localhost:9000'
+    ws: config.get('WS_HOST')
   }
 };
 
