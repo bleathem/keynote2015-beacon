@@ -1,6 +1,4 @@
-var gulp = require('gulp')
-  , env = require('node-env-file')
-  ;
+var gulp = require('gulp');
 
 var opts = require('./tasks/gulp-config.js')(gulp, {});
 
