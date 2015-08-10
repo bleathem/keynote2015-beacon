@@ -14,6 +14,7 @@ module.exports = exports = function (app, express, routers) {
   app.use(middle.cors);
   var staticRoot = __dirname + '/../../client/src';
   app.use(express.static(__dirname + '/../../client'));
+  app.use('/node_modules', express.static(__dirname + '/../../node_modules'));
   app.use(morgan('dev'));
   app.use('/api', routers.apiRouter);
   app.use(middle.logError);

@@ -2,14 +2,10 @@
 
 A location-scanner multi-foci force-layout built using d3.js and Rx.js.
 
-The visualization itself is a client-side application.  However node.js and bower
-are used to build the project and mange the dependencies respectively.
-
 Pre-requisutes:
 
 * node.js (installed globally)
 * gulp.js (installed globally)
-* bower (installed globally)
 
 = To install the project
 
@@ -17,7 +13,6 @@ Execute the following commands in your local clone of this repository:
 [source, bash]
 ----
 > npm install
-> bower install
 ----
 
 = To run the project:
